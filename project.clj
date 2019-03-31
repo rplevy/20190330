@@ -4,10 +4,32 @@
                  [clj-http "3.9.1"]
                  [compojure "1.6.1"]
                  [cheshire "5.8.1"]
-                 [com.taoensso/sente "1.11.0"]]
+                 [cider/piggieback "0.3.8"]
+                 [com.taoensso/sente "1.11.0"]
+                 [reagent "0.8.1"]
+                 [ring "1.5.1"]
+                 [ring/ring-defaults "0.2.1"]]
   :repl-options {:init-ns assignment.core}
-  :profiles {:dev
-             {:plugins [[lein-ring "0.12.5"]]
-              :ring {:handler assignment.routes/app}
-              :repl-options {:init-ns assignment.routes}}}
+  :plugins [[lein-ring "0.12.5"]
+            [lein-cljsbuild "1.1.5"]
+            [lein-figwheel "0.5.16"]]
+  :source-paths ["src/clj" "src/cljs"]
+  :figwheel {:nrepl-port 7002
+             :server-port 3000
+             :nrepl-middleware [cider.piggieback/wrap-cljs-repl]
+             :ring-handler assignment.routes/app}
+  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
+  :cljsbuild {:builds {:app
+                       {:source-paths ["src/cljs"]
+                        :compiler
+                        {:main "assignment.service"
+                         :output-to "resources/public/js/compiled/app.js"
+                         :output-dir "resources/public/js/compiled/out"
+                         :asset-path  "js/compiled/out"
+                         :source-map true
+                         :optimizations :none
+                         :pretty-print  true}
+                        :figwheel
+                        {:on-jsload "assignment.service/mount-root"
+                         :open-urls ["http://localhost:3000/"]}}}}
   :main assignment.simulator)

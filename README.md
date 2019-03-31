@@ -2,14 +2,16 @@
 
 ## Usage
 
-Start the event simulator:
+In two different shells:
+
+* Start the event simulator:
 
 ```
 lein run
 ```
 
-Start the server:
+* Start the service:
 
 ```
-lein ring server
+lein figwheel
 ```

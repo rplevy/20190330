@@ -11,7 +11,7 @@
 
 (defmethod emit-event! :http [{:keys [id location] :as sensor}]
   (log id location :http)
-  #_(let [{:keys [host port endpoint]} (get-in env [:channels :http])]
+  (let [{:keys [host port endpoint]} (get-in env [:channels :http])]
     (http/post (format "http://%s:%s%s" host port endpoint)
                {:headers {"Content-Type" "application/json"}
                 :accept :json
