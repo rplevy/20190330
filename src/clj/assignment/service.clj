@@ -48,9 +48,8 @@
   (POST "/sensor-event" request
         (let [sensor-event (json/parse-string (slurp (:body request)))]
           (log/infof "received sensor event %s" sensor-event)
-          (log/infof "sending %s" (chsk-send!
-                                   :sente/all-users-without-uid
-                                   [:service/sensor-event sensor-event])))
+          (chsk-send! :sente/all-users-without-uid
+                      [:service/sensor-event sensor-event]))
         {:status 201}))
 
 (def app

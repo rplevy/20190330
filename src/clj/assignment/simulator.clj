@@ -15,6 +15,18 @@
         (and (>= time-since-emit (* 1000 start))
              (> (rand) 0.5)))))
 
+(defn handle-door-event
+  "simulating door events requires toggling between open and closed"
+  [sensor-event last-emitted]
+  (if (= :door (:type sensor-event))
+    (assoc sensor-event
+           :status
+           (get {:closed :open, :open :closed} ; toggle
+                (get-in last-emitted
+                        [(:id sensor-event) :status]
+                        :closed))) ; start with closed if no prior status
+    sensor-event))
+
 (defn gather-events-to-emit
   "Accepts a map of {sensor-id sensor,...} with :last-emitted key on sensor.
    An empty/nil map is valid.
@@ -24,8 +36,9 @@
             (merge events
                    (when (ready-to-emit? sensor last-emitted)
                      {(:id sensor)
-                      (assoc sensor
-                        :last-emitted (System/currentTimeMillis))})))
+                      (-> sensor
+                          (assoc :last-emitted (System/currentTimeMillis))
+                          (handle-door-event last-emitted))})))
           {}
           (env :sensors)))
 

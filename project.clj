@@ -1,7 +1,9 @@
 (defproject assignment "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.10.0"]
+                 [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/tools.logging "0.4.1"]
                  [clj-http "3.9.1"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [compojure "1.6.1"]
                  [cheshire "5.8.1"]
                  [cider/piggieback "0.3.8"]
